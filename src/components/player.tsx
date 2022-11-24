@@ -5,7 +5,7 @@ import { Vector3 } from 'three';
 
 export const Player = () => {
     const { camera } = useThree();
-    const [ref, api] = useSphere(() => ({
+    const [ref, api]: any = useSphere(() => ({
         mass: 1,
         type: 'Dynamic',
         position: [0, 1, 0]
@@ -13,12 +13,12 @@ export const Player = () => {
 
     const vel = useRef([0, 0, 0]);
     useEffect(() => {
-        api.velocity.subscribe((v) => vel.current = v);
+        api.velocity.subscribe((v: any) => vel.current = v);
     }, [api.velocity]);
 
     const pos = useRef([0, 0, 0]);
     useEffect(() => {
-        api.position.subscribe((p) => pos.current = p);
+        api.position.subscribe((p: any) => pos.current = p);
     }, [api.position]);
 
     useFrame(() => {
