@@ -18,25 +18,41 @@ function actionByKey(key: any): any {
 }
 
 export const useKeyboard = () => {
-  const [actions, setMovement] = useState({
+  const [actions, setActions] = useState({
     moveForward: false,
     moveBackward: false,
     moveLeft: false,
     moveRight: false,
     jump: false,
-    texture1: false,
-    texture2: false,
-    texture3: false,
-    texture4: false,
-    texture5: false,
+    dirt: false,
+    grass: false,
+    glass: false,
+    wood: false,
+    log: false,
   });
 
-  const handleKeyDown = useCallback(() => {
-
+  const handleKeyDown = useCallback((evt: any) => {
+    const action = actionByKey(evt.code);
+    if (action) {
+      setActions(prev => {
+        return ({
+          ...prev,
+          [action]: true
+        })
+      })
+    }
   }, []);
 
-  const handleKeyUp = useCallback(() => {
-
+  const handleKeyUp = useCallback((evt: any) => {
+    const action = actionByKey(evt.code);
+    if (action) {
+      setActions(prev => {
+        return ({
+          ...prev,
+          [action]: false
+        })
+      })
+    }
   }, []);
 
   useEffect(() => {
@@ -47,5 +63,7 @@ export const useKeyboard = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  });
+  }, [handleKeyDown, handleKeyUp]);
+
+  return actions;
 };

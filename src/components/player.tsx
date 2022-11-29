@@ -2,8 +2,16 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useSphere } from '@react-three/cannon';
 import { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
+import { useKeyboard } from '../hooks/useKeyboard';
+
+const JUMP_FORCE = 5;
+const FORWARD_FORCE = 3;
 
 export const Player = () => {
+    const actions = useKeyboard();
+    console.log('@Player | actions :: ', Object.entries(actions).filter(([k, v]) => v));
+    
+
     const { camera } = useThree();
     const [ref, api]: any = useSphere(() => ({
         mass: 1,
@@ -24,7 +32,9 @@ export const Player = () => {
     useFrame(() => {
         camera.position.copy(new Vector3(pos.current[0], pos.current[1], pos.current[2]));
 
-        api.velocity.set(0, 0, 0)
+        if (actions.jump && Math.abs(vel.current[1]) < 0.05) {
+            api.velocity.set(vel.current[0], JUMP_FORCE, vel.current[2]);
+        }
     });
 
     return (
